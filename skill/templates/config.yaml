@@ -1,0 +1,251 @@
+# ============================================================
+# Neural Multimodal Sovereign 2026
+# Configuração Oficial Soberana
+# ============================================================
+# Este arquivo define EXCLUSIVAMENTE parâmetros.
+# Nenhuma lógica, cálculo ou execução é permitida aqui.
+# Qualquer violação invalida o projeto.
+# ============================================================
+
+project:
+  name: neural-multimodal-sovereign
+  version: "2026.1.0"
+  mode: production            # development | production | safe
+  offline_only: true
+  audit_required: true
+
+# ============================================================
+# EXECUÇÃO E RECURSOS
+# ============================================================
+
+runtime:
+  device:
+    cpu: true
+    gpu: true
+    edge: true
+    cluster: false
+  precision: float32           # float32 | float64
+  deterministic: true
+  max_threads: 8
+  num_workers: 4                 # Número de processos para pré-processamento de dados
+  prefetch_factor: 2             # Número de batches a serem pré-carregados na fila
+
+limits:
+  memory_mb: 65536
+  disk_mb: 524288
+  cpu_percent: 85
+  gpu_percent: 90
+
+# ============================================================
+# ENGINE NEURAL
+# ============================================================
+
+engine:
+  tensor:
+    backend: native            # apenas native é permitido
+    contiguous: true
+    allow_broadcast: true
+    explicit_gradients: true
+
+  autograd:
+    enabled: true
+    graph_release_per_step: true
+    detect_nan_gradients: true
+    max_graph_nodes: 500000
+
+# ============================================================
+# CAMADAS BASE
+# ============================================================
+
+layers:
+  linear: true
+  conv1d: true
+  conv2d: true
+  attention: manual
+  layer_norm: true
+  embeddings: true
+  positional_encoding: sinusoidal
+  moe:
+    enabled: true
+    experts: 4
+    sparse_routing: true
+
+# ============================================================
+# MODALIDADES
+# ============================================================
+
+modalities:
+  text:
+    enabled: true
+    tokenizer: custom
+    max_sequence_length: 4096
+    multilingual: true
+
+  vision:
+    enabled: true
+    input_resolution: [224, 224]
+    channels: 3
+
+  video:
+    enabled: true
+    frame_rate: 30
+    temporal_encoder: true
+
+  audio:
+    enabled: true
+    sample_rate: 44100
+    stft: true
+    mel_bins: 128
+
+  face:
+    enabled: true
+    embedding_dim: 512
+    anti_spoofing: basic
+
+  code:
+    enabled: true
+    ast_parser: true
+    static_analysis: basic
+
+# ============================================================
+# FUSÃO MULTIMODAL
+# ============================================================
+
+fusion:
+  latent_dim: 1024
+  shared_space: true
+  cross_attention: true
+  normalization: layer_norm
+
+# ============================================================
+# MEMÓRIA
+# ============================================================
+
+memory:
+  enabled: true
+
+  short_term:
+    max_items: 10000
+
+  working:
+    context_window: 8192
+
+  semantic:
+    enabled: true
+    vector_dim: 1024
+    similarity: cosine
+    compression: true
+
+  persistent:
+    enabled: true
+    path: ./data/memory
+    versioned: true
+    rollback_enabled: true
+
+  forgetting:
+    enabled: true
+    strategy: entropy_based
+    threshold: 0.85
+
+# ============================================================
+# AUTONOMIA
+# ============================================================
+
+autonomy:
+  enabled: true
+  level: controlled             # disabled | controlled | experimental
+  allow_architecture_change: false
+  allow_module_creation: true
+  allow_retraining: true
+
+  monitoring:
+    loss: true
+    entropy: true
+    stability: true
+
+# ============================================================
+# TREINAMENTO
+# ============================================================
+
+training:
+  enabled: true
+  batch_size: 16
+  learning_rate: 0.0001
+  lr_scheduler: adaptive
+  gradient_clipping: 1.0
+  max_epochs: 100
+
+  checkpoints:
+    enabled: true
+    interval_steps: 1000
+    keep_last: 5
+
+# ============================================================
+# INFERÊNCIA
+# ============================================================
+
+inference:
+  enabled: true
+  batch_mode: true
+  streaming: true
+  deterministic: true
+
+# ============================================================
+# AVALIAÇÃO
+# ============================================================
+
+evaluation:
+  enabled: true
+  per_modality: true
+  multimodal: true
+  entropy_tracking: true
+
+# ============================================================
+# SEGURANÇA
+# ============================================================
+
+security:
+  sandbox:
+    enabled: true
+    max_execution_time_sec: 5
+    restrict_filesystem: true
+    restrict_network: true
+
+# ============================================================
+# LOGS E AUDITORIA
+# ============================================================
+
+logging:
+  enabled: true
+  level: INFO                   # DEBUG | INFO | WARN | ERROR
+  structured: true
+  path: ./logs
+
+audit:
+  enabled: true
+  strict: true
+  block_on_violation: true
+
+# ============================================================
+# PERSISTÊNCIA
+# ============================================================
+
+persistence:
+  weights_path: ./data/weights
+  checkpoints_path: ./checkpoints
+  versioning: true
+  integrity_check: true
+
+# ============================================================
+# REGRA FINAL
+# ============================================================
+
+compliance:
+  frameworks_prohibited:
+    - pytorch
+    - tensorflow
+    - jax
+    - keras
+
+  external_apis_allowed: false
+  cloud_services_allowed: false
