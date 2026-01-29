@@ -1,0 +1,37 @@
+# ============================================================
+# Neural Multimodal Sovereign 2026 - Configuração do Projeto
+# ============================================================
+
+project:
+  name: neural-multimodal-sovereign-instance-01
+  version: "1.0.0"
+  mode: development
+  offline_only: true
+
+runtime:
+  precision: float32
+  deterministic: true
+  seed: 42
+  max_threads: 4
+
+engine:
+  tensor:
+    backend: native
+  autograd:
+    enabled: true
+    detect_nan: true
+
+modalities:
+  text:
+    enabled: true
+  vision:
+    enabled: true
+
+persistence:
+  weights_path: ./persistence/weights
+  checkpoints_path: ./checkpoints
+  versioning: true
+
+compliance:
+  rules_version: "1.0"
+  audit_on_save: true
